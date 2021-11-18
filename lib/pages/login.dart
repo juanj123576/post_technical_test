@@ -25,26 +25,6 @@ class _logInState extends State<logIn> {
     });
   }
 
-  var alertStyle = AlertStyle(
-      animationType: AnimationType.fromTop,
-      isCloseButton: true,
-      isOverlayTapDismiss: false,
-      descStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-      animationDuration: Duration(milliseconds: 500),
-      alertBorder: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-        side: BorderSide(
-          color: Colors.grey,
-        ),
-      ),
-      titleStyle: TextStyle(
-        color: basicColor,
-      ),
-      constraints: BoxConstraints.expand(width: 300),
-      //First to chars "55" represents transparency of color
-      overlayColor: Color(0x55000000),
-      alertElevation: 0,
-      alertAlignment: Alignment.center);
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -53,12 +33,12 @@ class _logInState extends State<logIn> {
       key: key,
       // backgroundColor: Color(0xfff7f7f7),
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "App Posts",
-          ),
-          iconTheme: IconThemeData(color: basicColor),
-          automaticallyImplyLeading: true),
+        centerTitle: true,
+        title: const Text(
+          "App Posts",
+        ),
+        backgroundColor: basicColor,
+      ),
 
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

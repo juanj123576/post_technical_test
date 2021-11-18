@@ -13,6 +13,7 @@ class todos_Screen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: basicColor,
           centerTitle: true,
           title: const Text('Post'),
         ),

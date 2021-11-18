@@ -25,12 +25,11 @@ class _menuState extends State<perfil> {
     return Scaffold(
         key: key,
         appBar: AppBar(
+          backgroundColor: basicColor,
           centerTitle: true,
           title: const Text(
             "Settings",
           ),
-          iconTheme: IconThemeData(color: basicColor),
-          automaticallyImplyLeading: true,
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 20),
@@ -39,8 +38,8 @@ class _menuState extends State<perfil> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ListTile(
-                leading: const Icon(Icons.login_outlined),
-                title: const Text('Number of logins'),
+                leading: const Icon(Icons.edit),
+                title: const Text('Most viewed post'),
                 onTap: () {
                   final postProvider =
                       Provider.of<PostStore>(context, listen: false);
@@ -49,7 +48,7 @@ class _menuState extends State<perfil> {
                     context: context,
                     style: alertStyle,
                     // type: AlertType.success,
-                    title: 'Most viewed post: ' +
+                    title: 'Id of the most viewed post: ' +
                         postProvider.most_post_viewed.id.toString(),
                     image: Icon(
                       Icons.done,
