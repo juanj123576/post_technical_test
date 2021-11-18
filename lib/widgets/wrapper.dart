@@ -5,9 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/user.dart';
 import 'package:my_app/pages/login.dart';
-import 'package:my_app/providers/post_providers.dart';
 import 'package:my_app/services/auth_service.dart';
-import 'package:my_app/widgets/post_item.dart';
 import 'package:provider/provider.dart';
 
 import 'nav.dart';

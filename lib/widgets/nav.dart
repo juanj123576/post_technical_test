@@ -5,11 +5,12 @@ import 'package:my_app/const/colors.dart';
 import 'package:my_app/pages/favorites_screen.dart';
 import 'package:my_app/pages/settings.dart';
 import 'package:my_app/pages/todos_Screen.dart';
-import 'package:provider/provider.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Nav extends StatefulWidget {
+  const Nav({Key? key}) : super(key: key);
+
   @override
   _NavState createState() => _NavState();
 }
@@ -22,19 +23,19 @@ class _NavState extends State<Nav> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.local_offer_outlined),
+        icon: const Icon(Icons.edit_outlined),
         title: ("Posts"),
         activeColorPrimary: basicColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.request_quote_outlined),
+        icon: const Icon(Icons.star),
         title: ("Favorites"),
         activeColorPrimary: basicColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.home),
+        icon: const Icon(Icons.settings),
         title: ("Settings"),
         activeColorPrimary: basicColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,

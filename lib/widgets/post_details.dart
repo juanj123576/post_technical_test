@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/const/colors.dart';
 import 'package:my_app/models/post_Model.dart';
 import 'package:my_app/providers/post_providers.dart';
 import 'package:provider/provider.dart';

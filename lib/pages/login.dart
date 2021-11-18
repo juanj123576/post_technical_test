@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/const/colors.dart';
+import 'package:my_app/providers/post_providers.dart';
 import 'package:my_app/services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class logIn extends StatefulWidget {
+  const logIn({Key? key}) : super(key: key);
+
   @override
-  _logInState createState() => new _logInState();
+  _logInState createState() => _logInState();
 }
 
 class _logInState extends State<logIn> {
@@ -20,6 +25,26 @@ class _logInState extends State<logIn> {
     });
   }
 
+  var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: true,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+      animationDuration: Duration(milliseconds: 500),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: basicColor,
+      ),
+      constraints: BoxConstraints.expand(width: 300),
+      //First to chars "55" represents transparency of color
+      overlayColor: Color(0x55000000),
+      alertElevation: 0,
+      alertAlignment: Alignment.center);
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -29,9 +54,8 @@ class _logInState extends State<logIn> {
       // backgroundColor: Color(0xfff7f7f7),
       appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.white,
           title: const Text(
-            "iniciar sesión",
+            "App Posts",
           ),
           iconTheme: IconThemeData(color: basicColor),
           automaticallyImplyLeading: true),
@@ -54,7 +78,7 @@ class _logInState extends State<logIn> {
                             color: basicColor,
                             fontSize: 14),
                         children: const <TextSpan>[
-                          TextSpan(text: "Iniciar sesión"),
+                          TextSpan(text: "LogIn"),
                         ]),
                   ),
                 ),
@@ -80,12 +104,12 @@ class _logInState extends State<logIn> {
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Correo electrónico",
+                          "Email",
                           style: TextStyle(color: basicColor, fontSize: 12),
                         ),
 
                         //email textfield
-                        Container(
+                        SizedBox(
                           width: width / 1.2,
                           child: TextFormField(
                             style: TextStyle(color: basicColor, fontSize: 14),
@@ -103,7 +127,7 @@ class _logInState extends State<logIn> {
                                   vertical: 15.0, horizontal: 20.0),
                               border: OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
-                                    const Radius.circular(30.0),
+                                    Radius.circular(30.0),
                                   ),
                                   borderSide:
                                       BorderSide(color: textfieldColor)),
@@ -122,7 +146,7 @@ class _logInState extends State<logIn> {
                               filled: true,
                               hintStyle: TextStyle(
                                   color: Colors.grey[400], fontSize: 14),
-                              hintText: "ejemplo@gmail.com",
+                              hintText: "example@gmail.com",
                             ),
                           ),
                         ),
@@ -131,12 +155,12 @@ class _logInState extends State<logIn> {
                           height: 6,
                         ),
                         Text(
-                          "Contraseña:",
+                          "Password",
                           style: TextStyle(color: basicColor, fontSize: 12),
                         ),
 
                         //password textfield
-                        Container(
+                        SizedBox(
                           width: width / 1.2,
                           child: TextFormField(
                             style: TextStyle(color: basicColor, fontSize: 14),
@@ -198,30 +222,28 @@ class _logInState extends State<logIn> {
                     ),
 
                     //login button
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 1.4,
                       height: MediaQuery.of(context).size.height / 16,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            side: BorderSide(
-                              color: basicColor,
-                            )),
-                        color: basicColor,
-                        textColor: Colors.white,
-                        padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              side: BorderSide(
+                                color: basicColor,
+                              )),
+                          primary: basicColor,
+                        ),
                         onPressed: () async {
                           bool emailValid = RegExp(
                                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                               .hasMatch(email.text);
                           if (formkey.currentState!.validate() && emailValid) {
-                            await login();
-                          } else {
-                            //   showSnackBar('Please Enter Valid Email');
-                          }
+                            await login_or_signUp();
+                          } else {}
                         },
                         child: const Text(
-                          "Ingresar",
+                          "Sign in or logIn",
                           style: TextStyle(
                             fontSize: 14.0,
                           ),
@@ -242,15 +264,36 @@ class _logInState extends State<logIn> {
     );
   }
 
-  login() {
+  login_or_signUp() {
+    try {
+      final auth = Provider.of<AuthService>(context, listen: false);
+
+      auth.firebaseAuth
+          .fetchSignInMethodsForEmail(email.text.trim())
+          .then((value) => {
+                if (value.isEmpty) {sign_up()} else {log_in()}
+              });
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+  }
+
+  log_in() async {
     final auth = Provider.of<AuthService>(context, listen: false);
-    auth.firebaseAuth
-        .fetchSignInMethodsForEmail(email.text.trim())
-        .then((value) => {
-              if (value.length == 0)
-                {auth.createUserWithEmailAndPassword(email.text, password.text)}
-              else
-                {auth.signInWithEmailAndPassword(email.text, password.text)}
-            });
+    final postProvider = Provider.of<PostStore>(context, listen: false);
+
+    await auth.signInWithEmailAndPassword(email.text, password.text, context);
+    postProvider.getfavorites();
+    postProvider.getviews();
+  }
+
+  sign_up() async {
+    final postProvider = Provider.of<PostStore>(context, listen: false);
+
+    final auth = Provider.of<AuthService>(context, listen: false);
+    await auth.createUserWithEmailAndPassword(
+        email.text, password.text, context);
+    postProvider.getfavorites();
+    postProvider.getviews();
   }
 }

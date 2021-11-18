@@ -68,17 +68,23 @@ _postListView(postProvider, data) {
                   children: <Widget>[
                     RawMaterialButton(
                       onPressed: () {
-                        postProvider.add_favorites(data[index]);
+                        if (data[index].isfavorite != true) {
+                          postProvider.add_favorites(data[index]);
+                        } else {
+                          postProvider.delete_favorites(data[index]);
+                        }
                       },
                       fillColor: Colors.red,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: const Icon(Icons.star_border),
+                      child: data[index].isfavorite == true
+                          ? const Icon(Icons.star)
+                          : const Icon(Icons.star_border),
                     ),
                     const SizedBox(width: 10),
                     RawMaterialButton(
-                      onPressed: () {
-                        postProvider.add_mostViewed(data[index]);
+                      onPressed: () async {
+                        await postProvider.add_mostViewed(data[index]);
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -88,7 +94,7 @@ _postListView(postProvider, data) {
                       fillColor: Colors.blue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Icon(Icons.more),
+                      child: const Icon(Icons.more),
                     ),
                   ],
                 )
