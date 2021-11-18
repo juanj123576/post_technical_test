@@ -12,7 +12,8 @@ The post_technical_test contains is made with a structure based in MVC, using pr
 Download or clone this repo by using the link below:
 
 ```
-https://github.com/juanj123576/post_technical_test.git```
+https://github.com/juanj123576/post_technical_test.git
+```
 
 **Step 2:**
 
@@ -59,14 +60,13 @@ flutter run
 ### Folder Structure
 Here is the core folder structure which flutter provides.
 
-```
 flutter-app/
 |- android
 |- build
 |- ios
 |- lib
 |- test
-```
+
 
 Here is the folder structure we have been using in this project
 
