@@ -15,6 +15,6 @@ class todos_Screen extends StatelessWidget {
           centerTitle: true,
           title: const Text('Post'),
         ),
-        body: ListaPost(postProvider.Posts));
+        body: ListaPost(postProvider.posts));
   }
 }

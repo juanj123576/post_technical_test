@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/const/colors.dart';
+import 'package:my_app/models/post_Model.dart';
+import 'package:my_app/providers/post_providers.dart';
+import 'package:my_app/services/auth_service.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:provider/provider.dart';
 
 class perfil extends StatefulWidget {
   const perfil({Key? key}) : super(key: key);
@@ -96,7 +100,12 @@ class _menuState extends State<perfil> {
                             "Sí",
                             style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            final auth = Provider.of<AuthService>(context,
+                                listen: false);
+                            Navigator.pop(context);
+                            await auth.singOut();
+                          },
                           color: const Color.fromRGBO(50, 80, 120, 1.0),
                           radius: BorderRadius.circular(25),
                         ),
@@ -110,5 +119,35 @@ class _menuState extends State<perfil> {
         ));
   }
 
-  onTap(BuildContext context, int i) {}
+  onTap(BuildContext context, int i) {
+    final postProvider = Provider.of<PostStore>(context, listen: false);
+
+    print(postProvider.most_post_viewed.id);
+    Alert(
+      context: context,
+      style: alertStyle,
+      // type: AlertType.success,
+      title: 'El id del post más visto es: ' +
+          postProvider.most_post_viewed.id.toString(),
+      image: Icon(
+        Icons.done,
+        color: declineColor,
+        size: 50,
+      ),
+
+      buttons: [
+        DialogButton(
+          child: const Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          onPressed: () async {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+          color: const Color.fromRGBO(50, 80, 120, 1.0),
+          radius: BorderRadius.circular(25),
+        ),
+      ],
+    ).show();
+  }
 }

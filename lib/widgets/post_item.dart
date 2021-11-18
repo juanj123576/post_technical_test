@@ -78,6 +78,8 @@ _postListView(postProvider, data) {
                     const SizedBox(width: 10),
                     RawMaterialButton(
                       onPressed: () {
+                        postProvider.add_mostViewed(data[index]);
+
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => post_details(data[index])),

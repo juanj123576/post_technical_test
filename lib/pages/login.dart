@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/const/colors.dart';
+import 'package:my_app/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class logIn extends StatefulWidget {
   @override
@@ -44,13 +46,6 @@ class _logInState extends State<logIn> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: height / 40),
-                Align(
-                  alignment: Alignment.center,
-                  child: Image(
-                    image: const AssetImage("images/logo.png"),
-                    height: MediaQuery.of(context).size.height / 10,
-                  ),
-                ),
                 Center(
                   child: RichText(
                     text: TextSpan(
@@ -247,5 +242,15 @@ class _logInState extends State<logIn> {
     );
   }
 
-  login() {}
+  login() {
+    final auth = Provider.of<AuthService>(context, listen: false);
+    auth.firebaseAuth
+        .fetchSignInMethodsForEmail(email.text.trim())
+        .then((value) => {
+              if (value.length == 0)
+                {auth.createUserWithEmailAndPassword(email.text, password.text)}
+              else
+                {auth.signInWithEmailAndPassword(email.text, password.text)}
+            });
+  }
 }

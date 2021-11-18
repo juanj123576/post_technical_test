@@ -3,7 +3,7 @@ class Post {
   final int id;
   final String title;
   final String body;
-
+  late int views;
   final bool isfavorite;
 
   Post({
